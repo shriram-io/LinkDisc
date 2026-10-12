@@ -1,4 +1,4 @@
-```python
+
 """Extract text from screenshots and analyze them for potential scams."""
 
 import os
@@ -128,4 +128,3 @@ def analyze_screenshot(file_storage):
             "guarantee that a message is safe or fraudulent."
         ),
     }
-```
