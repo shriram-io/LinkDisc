@@ -1,6 +1,3 @@
-```bash
 #!/usr/bin/env bash
-set -o errexit
-
-pip install -r requirements.txt
-```
+set -e
+python -m pip install -r requirements.txt
