@@ -49,18 +49,28 @@ async function analyzeMessage() {
             throw new Error(data.error || "Analysis failed.");
         }
 
+        const findings = Array.isArray(data.findings) ? data.findings : [];
+        const contextNotes = Array.isArray(data.context_notes)
+            ? data.context_notes
+            : [];
+
         messageResults.textContent = [
-            `Risk level: ${data.risk_level}`,
-            `Risk score: ${data.risk_score}/100`,
+            `Risk level: ${data.risk_level || "Unknown"}`,
+            `Risk score: ${data.risk_score ?? "Unavailable"}/100`,
             "",
             "Findings:",
-            ...(data.findings.length
-                ? data.findings.map(item =>
-                    `- ${item.finding} (${item.points} points)`)
+            ...(findings.length
+                ? findings.map(item =>
+                    typeof item === "string"
+                        ? `- ${item}`
+                        : `- ${item.finding || "Indicator detected"}${item.points != null ? ` (${item.points} points)` : ""}`)
                 : ["- No configured warning patterns detected."]),
+            ...(contextNotes.length
+                ? ["", "Context notes:", ...contextNotes.map(note => `- ${note}`)]
+                : []),
             "",
-            data.limitations
-        ].join("\n");
+            data.limitations || "Automated analysis can make mistakes."
+        ].join("\\n");
 
         messageResults.hidden = false;
     } catch (error) {
