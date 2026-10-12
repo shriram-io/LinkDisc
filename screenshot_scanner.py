@@ -6,12 +6,8 @@ from io import BytesIO
 from pathlib import Path
 
 import pytesseract
-from PIL import (
-    Image,
-    ImageOps,
-    UnidentifiedImageError,
-    ImageDecompressionBombError,
-)
+from PIL import Image, UnidentifiedImageError
+from PIL.Image import DecompressionBombError as ImageDecompressionBombError
 
 from message_scanner import analyze_message
 
