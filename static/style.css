@@ -337,7 +337,7 @@ footer {
     #screenshot-scan-button { width: 100%; }
 }
 ```css
-/* ===== ScamLens: Professional Motion System ===== */
+/* ===== LinkDisc: Professional Motion System ===== */
 
 :root {
     --motion-cyan: #48cae4;
@@ -495,7 +495,7 @@ select:focus {
     }
 }
 ```
-/* ===== ScamLens Startup Animation ===== */
+/* ===== LinkDisc Startup Animation ===== */
 #startup-screen {
     position: fixed;
     inset: 0;
@@ -613,7 +613,7 @@ select:focus {
 @keyframes boot-dots {
     0% {
 
-/* ===== ScamLens Cinematic Startup ===== */
+/* ===== LinkDisc Cinematic Startup ===== */
 
 #startup-screen {
     position: fixed;
@@ -1027,7 +1027,7 @@ select:focus {
     overflow: hidden !important;
     min-width: 0 !important;
 }
-/* ===== ScamLens UI refinement ===== */
+/* ===== LinkDisc UI refinement ===== */
 :root {
     --sl-bg: #080e18;
     --sl-panel: #101b2a;

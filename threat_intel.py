@@ -19,7 +19,7 @@ def check_threat(url: str) -> dict:
 
     payload = {
         "client": {
-            "clientId": "scamlens",
+            "clientId": "LinkDisc",
             "clientVersion": "1.0.0",
         },
         "threatInfo": {

@@ -224,7 +224,7 @@ if (screenshotForm) {
     });
 }
 
-/* ===== ScamLens cinematic startup controller ===== */
+/* ===== LinkDisc cinematic startup controller ===== */
 (() => {
     const screen = document.getElementById("startup-screen");
     if (!screen) return;
