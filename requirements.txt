@@ -1,4 +1,9 @@
+
 flask
 pytest
 requests
 python-dotenv
+gunicorn
+pytesseract
+Pillow
+Flask-Limiter

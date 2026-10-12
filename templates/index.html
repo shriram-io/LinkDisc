@@ -1,70 +1,266 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b1220">
-    <title>ScamLens — Link Security Scanner</title>
+    <meta name="theme-color" content="#080e18">
+    <meta name="description" content="Analyze suspicious links, messages, and screenshots for potential scam warning signs.">
+    <title>ScamLens — Digital Threat Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+ <div id="startup-screen" aria-hidden="true" style="display: none !important;">
+    <div class="cinematic-grid"></div>
+    <div class="cinematic-glow"></div>
+    <div class="startup-particles"></div>
+
+    <div class="startup-frame">
+        <div class="startup-topline">
+            <span class="startup-indicator"></span>
+            SECURITY INTELLIGENCE PLATFORM
+            <span class="startup-version">WEB / 01</span>
+        </div>
+
+        <div class="startup-visual">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+
+            <svg class="security-emblem" viewBox="0 0 160 180"
+                 xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="shieldGradient"
+                        x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#d8fbff"/>
+                        <stop offset="50%" stop-color="#48cae4"/>
+                        <stop offset="100%" stop-color="#147d9a"/>
+                    </linearGradient>
+                    <filter id="shieldGlow">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <path class="shield-shadow"
+                    d="M80 12 L137 34 V79 C137 119 113 145 80 164
+                       C47 145 23 119 23 79 V34 Z"/>
+
+                <path class="shield-outline"
+                    d="M80 12 L137 34 V79 C137 119 113 145 80 164
+                       C47 145 23 119 23 79 V34 Z"
+                    fill="none" stroke="url(#shieldGradient)"
+                    stroke-width="2.2" filter="url(#shieldGlow)"/>
+
+                <path class="shield-inner"
+                    d="M80 29 L121 45 V79 C121 108 103 130 80 144
+                       C57 130 39 108 39 79 V45 Z"
+                    fill="rgba(72,202,228,0.055)"
+                    stroke="rgba(72,202,228,0.35)"/>
+
+                <path class="shield-check"
+                    d="M57 83 L72 98 L104 65"
+                    fill="none" stroke="#d8fbff" stroke-width="5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            <div class="startup-scanline"></div>
+            <div class="startup-crosshair crosshair-a"></div>
+            <div class="startup-crosshair crosshair-b"></div>
+        </div>
+
+        <div class="startup-brand">
+            <div class="startup-wordmark">Scam<span>Lens</span></div>
+            <div class="startup-tagline">
+                See the threat before it sees you.
+            </div>
+        </div>
+
+        <div class="startup-progress-area">
+            <div class="startup-progress-label">
+                <span>SECURITY WORKSPACE</span>
+                <span class="startup-percent">INITIALIZING</span>
+            </div>
+            <div class="startup-progress-track">
+                <div class="startup-progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="startup-footer">
+            <span>PRIVACY-FOCUSED ANALYSIS</span>
+            <span>SCAMLENS / 01</span>
+        </div>
+    </div>
+</div>
+
+
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
     <header class="navbar">
-        <a class="brand" href="/">
+        <a class="brand" href="/" aria-label="ScamLens home">
             <span class="brand-icon">S</span>
-            <span>ScamLens<small>LINK SECURITY</small></span>
+            <span class="brand-copy">
+                <strong>ScamLens</strong>
+                <small>DIGITAL THREAT ANALYSIS</small>
+            </span>
         </a>
-        <span class="status"><span></span> SCANNER ONLINE</span>
+
+        <div class="header-meta">
+            <span class="status-dot"></span>
+            <span class="status">SCANNER ONLINE</span>
+            <span class="header-divider"></span>
+            <span class="header-label">SECURITY WORKSPACE</span>
+        </div>
     </header>
 
     <main class="container">
         <section class="hero">
-            <div class="eyebrow">YOUR FIRST LINE OF DEFENCE</div>
-            <h1>Think before<br>you <span>click.</span></h1>
-            <p>Check suspicious links for warning signs before visiting them.
-               Simple, transparent URL security analysis.</p>
-        </section>
-<section class="scanner">
-    <label for="analysis-mode">WHAT DO YOU WANT TO CHECK?</label>
-
-    <div class="input-row">
-        <select id="analysis-mode" aria-label="Analysis type">
-            <option value="url">Check a link</option>
-            <option value="message">Check a message or email</option>
-        </select>
-    </div>
-</section>
-<section class="scanner" id="message-input-panel" hidden>
-    <label for="message-input">MESSAGE OR EMAIL TO CHECK</label>
-    <textarea
-        id="message-input"
-        maxlength="10000"
-        rows="6"
-        placeholder="Paste a suspicious SMS, email, or chat message..."
-    ></textarea>
-    <button id="message-scan-button" type="button">
-        Analyze Message →
-    </button>
-    <div id="message-status" role="status" aria-live="polite"></div>
-    <pre id="message-results" hidden></pre>
-</section>
-        <section class="scanner">
-            <label for="url-input">URL TO INSPECT</label>
-            <div class="input-row">
-                <input id="url-input" type="text"
-                       placeholder="https://example.com"
-                       autocomplete="url" spellcheck="false"
-                       maxlength="2048">
-                <button id="scan-button" type="button">Scan URL →</button>
+            <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                DIGITAL SAFETY STARTS HERE
             </div>
-            <p class="privacy">🔒 Analysis uses URL text only. ScamLens does not open the link.</p>
-            <div id="message" role="status" aria-live="polite"></div>
+
+            <h1>Pause. Inspect.<br><span>Then proceed.</span></h1>
+
+            <p class="hero-description">
+                Investigate suspicious links, messages, and screenshots
+                before you trust them. Get transparent analysis and
+                evidence-based warning signs in one workspace.
+            </p>
+
+            <div class="hero-meta">
+                <span><span class="meta-check">✓</span> Transparent findings</span>
+                <span><span class="meta-check">✓</span> No link opening</span>
+                <span><span class="meta-check">✓</span> Privacy-conscious analysis</span>
+            </div>
+        </section>
+
+        <section class="workspace">
+            <div class="workspace-heading">
+                <div>
+                    <span class="section-kicker">ANALYSIS WORKSPACE / 01</span>
+                    <h2>Inspect a potential threat</h2>
+                    <p>Choose an input type to begin your analysis.</p>
+                </div>
+                <div class="workspace-indicator">
+                    <span class="status-dot"></span>
+                    READY
+                </div>
+            </div>
+
+            <section class="scanner mode-selector">
+                <label for="analysis-mode">SELECT ANALYSIS TYPE</label>
+                <div class="input-row">
+                    <select id="analysis-mode" aria-label="Analysis type">
+                        <option value="url">Check a link</option>
+                        <option value="message">Check a message or email</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="scanner input-card" id="url-input-panel">
+                <div class="card-heading">
+                    <span class="card-icon" aria-hidden="true">↗</span>
+                    <div>
+                        <h3>URL intelligence</h3>
+                        <p>Inspect a suspicious website address.</p>
+                    </div>
+                    <span class="card-index">01</span>
+                </div>
+
+                <label for="url-input">URL TO INSPECT</label>
+                <div class="input-row">
+                    <input
+                        id="url-input"
+                        type="text"
+                        placeholder="https://example.com"
+                        autocomplete="url"
+                        spellcheck="false"
+                        maxlength="2048"
+                    >
+                    <button id="scan-button" type="button">Analyze URL <span>→</span></button>
+                </div>
+
+                <p class="privacy">
+                    <span aria-hidden="true">▣</span>
+                    The scanner analyzes the submitted URL; it does not open the destination.
+                </p>
+                <div id="message" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="scanner input-card" id="message-input-panel" hidden>
+                <div class="card-heading">
+                    <span class="card-icon" aria-hidden="true">≡</span>
+                    <div>
+                        <h3>Message analysis</h3>
+                        <p>Look for common social-engineering warning signs.</p>
+                    </div>
+                    <span class="card-index">02</span>
+                </div>
+
+                <label for="message-input">MESSAGE OR EMAIL CONTENT</label>
+                <textarea
+                    id="message-input"
+                    maxlength="10000"
+                    rows="7"
+                    placeholder="Paste the suspicious SMS, email, or chat message here..."
+                ></textarea>
+
+                <div class="input-footer">
+                    <span>Maximum 10,000 characters</span>
+                    <button id="message-scan-button" type="button">Analyze message <span>→</span></button>
+                </div>
+
+                <div id="message-status" role="status" aria-live="polite"></div>
+                <pre id="message-results" hidden></pre>
+            </section>
+
+            <section class="scanner-panel input-card screenshot-card" id="screenshot-input-panel">
+                <div class="card-heading">
+                    <span class="card-icon" aria-hidden="true">▧</span>
+                    <div>
+                        <h3>Screenshot analysis</h3>
+                        <p>Extract text from an image and inspect it for scam indicators.</p>
+                    </div>
+                    <span class="card-index">03</span>
+                </div>
+
+                <form id="screenshot-form" enctype="multipart/form-data">
+                    <label for="screenshot-file">UPLOAD A SCREENSHOT</label>
+                    <div class="upload-area">
+                        <span class="upload-symbol" aria-hidden="true">↑</span>
+                        <div class="upload-copy">
+                            <strong>Choose an image to analyze</strong>
+                            <p>PNG, JPG, WEBP or BMP</p>
+                        </div>
+                        <input
+                            type="file"
+                            id="screenshot-file"
+                            name="screenshot"
+                            accept="image/png,image/jpeg,image/webp,image/bmp"
+                            required
+                        >
+                    </div>
+                    <button type="submit" id="screenshot-scan-button">
+                        Analyze screenshot <span>→</span>
+                    </button>
+                </form>
+
+                <p id="screenshot-status" role="status" aria-live="polite"></p>
+                <pre id="screenshot-results" hidden></pre>
+            </section>
         </section>
 
         <section id="results" class="results" hidden>
             <div class="result-heading">
                 <div>
-                    <span class="eyebrow">ANALYSIS REPORT</span>
-                    <h2>Scan results</h2>
+                    <span class="section-kicker">ANALYSIS REPORT / 02</span>
+                    <h2>Assessment results</h2>
                 </div>
                 <span id="risk-badge" class="risk-badge">Pending</span>
             </div>
@@ -73,35 +269,58 @@
                 <div class="score-number">
                     <span id="risk-score">0</span><small>/100</small>
                 </div>
-                <div>
+                <div class="score-details">
+                    <span class="section-kicker">ESTIMATED RISK</span>
                     <h3 id="risk-title">Risk assessment</h3>
                     <p id="hostname"></p>
                 </div>
             </div>
-<div class="advice">
-    <strong>Google Safe Browsing</strong>
-    <p id="threat-status">Not checked yet.</p>
-</div>
-            <h3>Findings</h3>
-            <ul id="findings"></ul>
-            <p id="no-findings" hidden>No warning signs were detected by these basic checks. This does not prove the URL is safe.</p>
 
             <div class="advice">
-                <strong>Recommendation</strong>
+                <div class="advice-heading">
+                    <span class="advice-mark">i</span>
+                    <strong>Threat intelligence</strong>
+                </div>
+                <p id="threat-status">Not checked yet.</p>
+            </div>
+
+            <div class="findings-panel">
+                <h3>Detected warning signs</h3>
+                <ul id="findings"></ul>
+                <p id="no-findings" hidden>
+                    No warning signs were detected by these checks. This does not prove the URL is safe.
+                </p>
+            </div>
+
+            <div class="advice recommendation-panel">
+                <div class="advice-heading">
+                    <span class="advice-mark">!</span>
+                    <strong>Recommended next step</strong>
+                </div>
                 <p id="recommendation"></p>
             </div>
+
             <p id="limitations" class="limitations"></p>
         </section>
 
         <section class="disclaimer">
-            <strong>Know the limits.</strong>
-            ScamLens uses basic URL heuristics. It is not a definitive
-            malware or phishing detector. Never enter passwords or banking
-            details on a website you do not trust.
+            <span class="disclaimer-icon" aria-hidden="true">!</span>
+            <div>
+                <strong>Understand the limitations</strong>
+                <p>
+                    ScamLens provides heuristic analysis and available threat-intelligence results.
+                    It can make mistakes and cannot guarantee that a link, message, or image is safe.
+                    Never share passwords, OTPs, banking details, or other sensitive information.
+                </p>
+            </div>
         </section>
     </main>
 
-    <footer>ScamLens · Built for safer browsing · No link is guaranteed safe</footer>
+    <footer>
+        <a class="footer-brand" href="/">ScamLens</a>
+        <span>Independent analysis. Informed decisions.</span>
+        <span class="footer-status"><span class="status-dot"></span> SYSTEM READY</span>
+    </footer>
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>

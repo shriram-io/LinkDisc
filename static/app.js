@@ -155,3 +155,99 @@ function displayResults(data) {
         findings.appendChild(item);
     });
 }
+const screenshotForm = document.getElementById("screenshot-form");
+
+if (screenshotForm) {
+    screenshotForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const fileInput = document.getElementById("screenshot-file");
+        const status = document.getElementById("screenshot-status");
+        const results = document.getElementById("screenshot-results");
+        const button = document.getElementById("screenshot-scan-button");
+
+        results.hidden = true;
+        results.textContent = "";
+
+        if (!fileInput.files || !fileInput.files[0]) {
+            status.textContent = "Please select a screenshot first.";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("screenshot", fileInput.files[0]);
+
+        button.disabled = true;
+        status.textContent = "Extracting text and analyzing screenshot...";
+
+        try {
+            const response = await fetch("/api/analyze-screenshot", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Screenshot analysis failed.");
+            }
+
+            const analysis = data.analysis || {};
+            const findings = Array.isArray(analysis.findings)
+                ? analysis.findings
+                : [];
+
+            results.textContent = [
+                "EXTRACTED TEXT",
+                data.extracted_text || "No text extracted.",
+                "",
+                "RISK LEVEL",
+                analysis.risk_level || analysis.risk || "Unknown",
+                "",
+                "RISK SCORE",
+                String(analysis.risk_score ?? analysis.score ?? "Unavailable"),
+                "",
+                "FINDINGS",
+                ...(findings.length ? findings : ["No specific indicators found."]),
+                "",
+                "LIMITATIONS",
+                data.limitations || "Automated analysis can make mistakes."
+            ].join("\n");
+
+            results.hidden = false;
+            status.textContent = "Screenshot analysis completed.";
+        } catch (error) {
+            status.textContent = error.message || "Unable to analyze screenshot.";
+        } finally {
+            button.disabled = false;
+        }
+    });
+}
+
+/* ===== ScamLens cinematic startup controller ===== */
+(() => {
+    const screen = document.getElementById("startup-screen");
+    if (!screen) return;
+
+    const progressLabel = screen.querySelector(".startup-percent");
+
+    const finishStartup = () => {
+        if (screen.classList.contains("startup-hidden")) return;
+
+        if (progressLabel) {
+            progressLabel.textContent = "WORKSPACE READY";
+        }
+
+        screen.classList.add("startup-hidden");
+
+        window.setTimeout(() => {
+            if (screen.isConnected) screen.remove();
+        }, 800);
+    };
+
+    const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    window.setTimeout(finishStartup, reducedMotion ? 100 : 2400);
+})();
