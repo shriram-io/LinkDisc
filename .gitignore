@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 .env
 *.py[cod]
+
+# Local UI/UX design tools
+.agents/
+design-system/
+skills-lock.json
