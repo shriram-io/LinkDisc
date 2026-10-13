@@ -30,6 +30,8 @@ LinkDisc is a web-based security tool that analyzes links, message text, and scr
 
 ## Run Locally
 
+## Run Locally
+
 ### 1. Clone the repository
 
 ```bash
@@ -46,9 +48,15 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+If PowerShell blocks activation, use the virtual environment's Python executable directly:
 
 ```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+### 3. Install dependencies
+
+```bash
 python -m pip install -r requirements.txt
 ```
 
@@ -76,7 +84,7 @@ TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe
 
 ### 6. Start the application
 
-```powershell
+```bash
 python app.py
 ```
 
