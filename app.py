@@ -1,12 +1,13 @@
+
 from screenshot_scanner import analyze_screenshot
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, Response, jsonify, render_template, request
 from dotenv import load_dotenv
 
 from scanner import analyze_url
 from threat_intel import check_threat
 from message_scanner import analyze_message
-load_dotenv()
 
+load_dotenv()
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024
@@ -31,22 +32,34 @@ def add_security_headers(response):
         "camera=(), microphone=(), geolocation=()"
     )
     response.headers["Content-Security-Policy"] = (
-    "default-src 'self'; "
-    "script-src 'self'; "
-    "style-src 'self'; "
-    "style-src-attr 'unsafe-inline'; "
-    "img-src 'self' data:; "
-    "connect-src 'self'; "
-    "base-uri 'self'; "
-    "form-action 'self'; "
-    "frame-ancestors 'none'; "
-    "object-src 'none'"
-)
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self'; "
+        "style-src-attr 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "connect-src 'self'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "frame-ancestors 'none'; "
+        "object-src 'none'"
+    )
     return response
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://linkdisc.onrender.com/</loc>
+    </url>
+</urlset>"""
+    return Response(xml, mimetype="application/xml")
 
 
 @app.route("/api/scan", methods=["POST"])
@@ -64,12 +77,9 @@ def scan_url():
 
     try:
         result = analyze_url(url)
-
-        # Check the normalized URL returned by the scanner.
         threat_result = check_threat(result["url"])
         result["threat_intelligence"] = threat_result
 
-        # Only a confirmed match increases the score.
         if threat_result["status"] == "threat_detected":
             result["risk_score"] = max(result["risk_score"], 80)
             result["risk_level"] = "High"
@@ -84,6 +94,7 @@ def scan_url():
 
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
+
 
 @app.route("/api/analyze-message", methods=["POST"])
 @limiter.limit("10 per minute")
@@ -101,11 +112,15 @@ def analyze_message_route():
     try:
         result = analyze_message(message)
         return jsonify(result), 200
+
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
+
+
 @app.errorhandler(413)
 def request_too_large(error):
     return jsonify({"error": "Request is too large."}), 413
+
 
 @app.route("/api/analyze-screenshot", methods=["POST"])
 @limiter.limit("5 per minute")
@@ -123,11 +138,14 @@ def analyze_screenshot_route():
         app.logger.error("Screenshot OCR unavailable: %s", exc)
         return jsonify({"error": str(exc)}), 503
 
+
 @app.errorhandler(500)
 def internal_server_error(error):
     app.logger.error("Internal server error: %s", error)
     return jsonify({
         "error": "An unexpected server error occurred. Please try again."
     }), 500
+
+
 if __name__ == "__main__":
     app.run(debug=False)
